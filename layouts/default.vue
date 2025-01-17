@@ -6,6 +6,11 @@
 </template>
 
 <style>
+.container {
+	padding-left: 1rem;
+	padding-right: 1rem;
+}
+
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)
