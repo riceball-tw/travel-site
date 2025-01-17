@@ -24,9 +24,10 @@
 </template>
 
 <script setup lang="ts">
+  import type { AttractionsResponse } from '@/types/attractions';
   const attractionsPageNumber = ref(1)
   const locale = 'zh-tw'
-  const { data: attractions, status: attractionsStatus } = useLazyFetch(`/api/travel-taipei/${locale}/Attractions/All`, {
+  const { data: attractions, status: attractionsStatus } = useLazyFetch<AttractionsResponse>(`/api/travel-taipei/${locale}/Attractions/All`, {
     query: {page: attractionsPageNumber},
   })
 

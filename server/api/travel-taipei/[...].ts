@@ -1,5 +1,5 @@
 import { joinURL } from 'ufo'
-import type { AttractionsResponse } from '@/types/attractions';
+
 
 export default defineEventHandler(async (event) => {
   const travelTaipeiBaseUrl = 'https://www.travel.taipei/open-api' 
@@ -13,5 +13,5 @@ export default defineEventHandler(async (event) => {
     headers: {
       "Accept": "application/json"
     }
-  }) as Promise<AttractionsResponse>
+  })
 })
