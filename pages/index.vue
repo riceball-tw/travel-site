@@ -3,6 +3,15 @@
     <!-- Banner -->
     <h1 class="attraction-banner">Attractions</h1>
     <div class="attraction-content">
+      <!-- Category Select -->
+      <select v-model="currentCategoryId" v-if="attractionCategoriesStatus === 'success'">
+        <option :value="null">All</option>
+        <option v-for="{id, name} in attractionCategories.data.Category" :key="id" :value="id">{{ name }}</option>
+      </select>
+      <div v-else>
+        Attraction Category Select is Loading...
+      </div>
+
       <!-- Pagination -->
       <div class="pagination">
         <button class="pagination-button" type="button" @click="() => handleChangeAttractionPageNumber(attractionsPageNumber - 1)">Previous Page</button>
@@ -25,10 +34,18 @@
 
 <script setup lang="ts">
   import type { AttractionsResponse } from '@/types/attractions';
-  const attractionsPageNumber = ref(1)
+  import type { AttractionCategoriesType, AttractionCategory } from '@/types/attractionCategories'
+  
   const locale = 'zh-tw'
+  const currentCategoryId = defineModel<AttractionCategory['id'] | null>('currentCategory', { default: null })
+  const attractionsPageNumber = ref(1)
+  watch(currentCategoryId, () => { attractionsPageNumber.value = 1 })
+  
   const { data: attractions, status: attractionsStatus } = useLazyFetch<AttractionsResponse>(`/api/travel-taipei/${locale}/Attractions/All`, {
-    query: {page: attractionsPageNumber},
+    query: { page: attractionsPageNumber, categoryIds: currentCategoryId},
+  })
+  const {data: attractionCategories, status: attractionCategoriesStatus} = useLazyFetch(`/api/travel-taipei/${locale}/Miscellaneous/Categories`, {
+    query: { type: 'Attractions' } as { type: AttractionCategoriesType }
   })
 
   function handleChangeAttractionPageNumber(newPageNumber: number) {
