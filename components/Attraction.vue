@@ -5,8 +5,8 @@
       <span v-else>😑</span>
     </button>
     <button v-if="isEditable" @click="isEditing = !isEditing">
-      <tempalte v-if="isEditing">Preview</tempalte>
-      <tempalte v-else>Edit</tempalte>
+      <template v-if="isEditing">Preview</template>
+      <template v-else>Edit</template>
     </button>
 
     <div v-if="isEditing">
