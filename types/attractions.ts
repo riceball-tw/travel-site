@@ -1,9 +1,9 @@
 export interface AttractionsResponse {
   total: number;
-  data: Data[];
+  data: Attraction[];
 }
 
-export interface Data {
+export interface Attraction {
   id: number;
   name: string;
   name_zh: unknown;
