@@ -13,20 +13,31 @@
       </div>
 
       <!-- Pagination -->
-      <div class="pagination">
-        <button :disabled="isPreviousPageReachEnd" class="pagination-button" type="button" @click="() => { attractionsPageNumber = attractionsPageNumber - 1 }">Previous Page</button>
-        <span class="pagination-number">{{ attractionsPageNumber }}</span>
-        <button :disabled="isNextPageReachEnd" class="pagination-button" type="button" @click="() => { attractionsPageNumber = attractionsPageNumber + 1}">Next Page</button>
-      </div>
-      <!-- Attraction -->
-      <ul class="attraction-group" v-if="attractionsStatus === 'success'">
-        <template v-for="attraction in attractions!.data" :key="attraction.id">
-          <Attraction :attraction="attraction" />
+      <ClientOnly>
+        <div class="pagination">
+          <button :disabled="isPreviousPageReachEnd" class="pagination-button" type="button" @click="() => { attractionsPageNumber = attractionsPageNumber - 1 }">Previous Page</button>
+          <span class="pagination-number">{{ attractionsPageNumber }}</span>
+          <button :disabled="isNextPageReachEnd" class="pagination-button" type="button" @click="() => { attractionsPageNumber = attractionsPageNumber + 1}">Next Page</button>
+        </div>
+        <template #fallback>
+          Pagination is loading...
         </template>
-      </ul>
-      <div class="attraction-loader" v-else>
-        Attractions is Loading...
-      </div>
+      </ClientOnly>
+      
+      <!-- Attraction -->
+      <ClientOnly>
+        <ul class="attraction-group" v-if="attractionsStatus === 'success'">
+          <template v-for="attraction in attractions!.data" :key="attraction.id">
+            <Attraction :attraction="attraction" />
+          </template>
+        </ul>
+        <div v-else>
+          Attractions is Loading...
+        </div>
+        <template #fallback>
+          <p class="attraction-loader">Attractions is Loading...</p>
+        </template>
+      </ClientOnly>
     </div>
   </div>
 </template>
