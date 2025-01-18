@@ -20,16 +20,9 @@
       </div>
       <!-- Attraction -->
       <ul class="attraction-group" v-if="attractionsStatus === 'success'">
-        <li class="attraction" v-for="(attraction, index) in attractions!.data" :key="attraction.id">
-          <button @click="() => toggleFavoriteAttraction(attraction)" type="button">
-            <!-- !Todo -->
-            <span v-if="isTargetAttractionExist(favoriteAttractions, attraction.id)">✅</span>
-            <span v-else>😑</span>
-          </button>
-
-          <h2 class="attraction-heading">{{ attraction.name }}</h2>
-          <p class="attraction-introduction">{{ attraction.introduction }}</p>
-        </li>
+        <template v-for="attraction in attractions!.data" :key="attraction.id">
+          <Attraction :attraction="attraction" />
+        </template>
       </ul>
       <div class="attraction-loader" v-else>
         Attractions is Loading...
@@ -41,10 +34,6 @@
 <script setup lang="ts">
   import type { AttractionsResponse } from '@/types/attractions';
   import type { AttractionCategoriesType, AttractionCategory } from '@/types/attractionCategories'
-
-  const favoriteAttractionStore = useFavoriteAttractionStore()
-  const { favoriteAttractions } = storeToRefs(favoriteAttractionStore)
-  const { toggleFavoriteAttraction, isTargetAttractionExist } = favoriteAttractionStore
 
   const locale = 'zh-tw'
   const currentCategoryId = defineModel<AttractionCategory['id'] | null>('currentCategory', { default: null })
@@ -66,7 +55,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .attraction-banner {
     text-align: center;
     font-weight: bold;
