@@ -14,9 +14,9 @@
 
       <!-- Pagination -->
       <div class="pagination">
-        <button class="pagination-button" type="button" @click="() => handleChangeAttractionPageNumber(attractionsPageNumber - 1)">Previous Page</button>
+        <button :disabled="isPreviousPageReachEnd" class="pagination-button" type="button" @click="() => { attractionsPageNumber = attractionsPageNumber - 1 }">Previous Page</button>
         <span class="pagination-number">{{ attractionsPageNumber }}</span>
-        <button class="pagination-button" type="button" @click="() => handleChangeAttractionPageNumber(attractionsPageNumber + 1)">Next Page</button>
+        <button :disabled="isNextPageReachEnd" class="pagination-button" type="button" @click="() => { attractionsPageNumber = attractionsPageNumber + 1}">Next Page</button>
       </div>
       <!-- Attraction -->
       <ul class="attraction-group" v-if="attractionsStatus === 'success'">
@@ -47,12 +47,19 @@
     query: { type: 'Attractions' } as { type: AttractionCategoriesType }
   })
 
-  function handleChangeAttractionPageNumber(newPageNumber: number) {
-    const isNewPageNumberNegative = newPageNumber < 1
-    const isNewPageReachEnd = false // No idea which data represents page is reaching end, set fix value for now
-    if (isNewPageNumberNegative || isNewPageReachEnd) return
-    attractionsPageNumber.value = newPageNumber
-  }
+  const isNextPageReachEnd = computed(() => {
+    const totalAttraction = attractions.value?.total || 0
+    const maxAttractionPerPage = 30
+    const nextPage = attractionsPageNumber.value + 1
+    const lastPage = Math.ceil(totalAttraction / maxAttractionPerPage)
+    return nextPage > lastPage
+  })
+
+  const isPreviousPageReachEnd = computed(() => {
+    const previousPage = attractionsPageNumber.value - 1
+    return previousPage < 1
+    
+  })
 </script>
 
 <style lang="scss" scoped>
