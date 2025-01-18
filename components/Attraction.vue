@@ -4,9 +4,23 @@
       <span v-if="isTargetAttractionExist(favoriteAttractions, attraction.id)">✅</span>
       <span v-else>😑</span>
     </button>
+    <button v-if="isEditable" @click="isEditing = !isEditing">
+      <tempalte v-if="isEditing">Preview</tempalte>
+      <tempalte v-else>Edit</tempalte>
+    </button>
 
-    <h2 class="attraction-heading">{{ attraction.name }}</h2>
-    <p class="attraction-introduction">{{ attraction.introduction }}</p>
+    <div v-if="isEditing">
+      <form @submit.prevent="handleUpdateAttraction">
+        <input id="id" type="hidden" :value="attraction.id">
+        <label for="name">Name</label>
+        <input id="name" :value="attraction.name" required />
+        <button type="submit">Update Attraction</button>
+      </form>
+    </div>
+    <div v-else>
+      <h2 class="attraction-heading">{{ attraction.name }}</h2>
+      <p class="attraction-introduction">{{ attraction.introduction }}</p>
+    </div>
   </li>
 </template>
 
@@ -15,9 +29,24 @@
 
   const favoriteAttractionStore = useFavoriteAttractionStore()
   const { favoriteAttractions } = storeToRefs(favoriteAttractionStore)
-  const { toggleFavoriteAttraction, isTargetAttractionExist } = favoriteAttractionStore
+  const { toggleFavoriteAttraction, isTargetAttractionExist, getEditedFavoriteAttractions } = favoriteAttractionStore
   
-  const { attraction } = defineProps<{attraction: Attraction}>()
+  const { attraction, isEditable } = defineProps<{attraction: Attraction, isEditable?: boolean}>()
+  const isEditing = ref(false) 
+
+  // Why any? - DOM is uncertain so manually casting type here
+  function handleUpdateAttraction(event: any) {
+    // Notice: Data submitted from form will become string
+    const newId = parseInt(event.target.id.value) as number
+    const targetAttraction = favoriteAttractions.value.find(attraction => attraction.id === newId)
+    const editedPartialAttraction = {
+      name: event.target.name.value
+    } as Attraction
+    const updatedAttraction = {...targetAttraction, ...editedPartialAttraction}
+    const newAttractions = getEditedFavoriteAttractions(favoriteAttractions.value, updatedAttraction)
+    favoriteAttractions.value = newAttractions
+    isEditing.value = !isEditing
+  }
 </script>
 
 <style lang="scss">

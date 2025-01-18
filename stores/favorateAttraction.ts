@@ -21,8 +21,16 @@ export const useFavoriteAttractionStore = defineStore('favoriteAttraction', () =
     }
   }
 
+  function getEditedFavoriteAttractions(attractions: Attraction[], newAttraction: Attraction) {
+    return attractions.map(attraction => {
+      if (attraction.id === newAttraction.id) {
+        return newAttraction
+      }
+      return attraction
+    })
+  }
 
-  return { favoriteAttractions, toggleFavoriteAttraction, isTargetAttractionExist }
+  return { favoriteAttractions, toggleFavoriteAttraction, isTargetAttractionExist, getEditedFavoriteAttractions }
 }, {
   persist: {
     storage: piniaPluginPersistedstate.localStorage(),

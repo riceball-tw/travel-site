@@ -4,7 +4,7 @@
 
     <ul class="attraction-group">
       <template v-for="attraction in favoriteAttractions" :key="attraction.id">
-        <Attraction :attraction="attraction" />
+        <Attraction :attraction="attraction" :is-editable="true" />
       </template>
     </ul>
   </div>
