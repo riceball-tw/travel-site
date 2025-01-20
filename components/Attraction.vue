@@ -39,9 +39,10 @@
     // Notice: Data submitted from form will become string
     const newId = parseInt(event.target.id.value) as number
     const targetAttraction = favoriteAttractions.value.find(attraction => attraction.id === newId)
-    const editedPartialAttraction = {
+    if (!targetAttraction) return
+    const editedPartialAttraction: Partial<Attraction> = {
       name: event.target.name.value
-    } as Attraction
+    }
     const updatedAttraction = {...targetAttraction, ...editedPartialAttraction}
     const newAttractions = getEditedFavoriteAttractions(favoriteAttractions.value, updatedAttraction)
     favoriteAttractions.value = newAttractions
