@@ -1,4 +1,4 @@
-# Travel Site : A Isomorphic Nuxt App for Exploring Attractions
+# Travel Site : An Isomorphic Nuxt App for Exploring Attractions
 
 The project is for take-home assignment usage.
 
